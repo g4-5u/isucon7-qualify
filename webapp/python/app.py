@@ -395,7 +395,7 @@ def ext2mime(ext):
 
 
 @app.route('/icons/<file_name>')
-@cache.cached(timeout=30)
+@cache.cached(timeout=60)
 def get_icon(file_name):
     cur = dbh().cursor()
     cur.execute("SELECT data FROM image WHERE name = %s", (file_name,))
