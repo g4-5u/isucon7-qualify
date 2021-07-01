@@ -394,8 +394,8 @@ def get_icon(file_name):
     ext = os.path.splitext(file_name)[1] if '.' in file_name else ''
     mime = ext2mime(ext)
     if row and mime:
-        # return flask.Response(row['data'], mimetype=mime)
-        return flask.Response(row, mimetype=mime)
+        return flask.Response(row['data'], mimetype=mime)
+        # return flask.Response(row, mimetype=mime)
     flask.abort(404)
 
 
