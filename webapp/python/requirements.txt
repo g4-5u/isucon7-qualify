@@ -3,3 +3,4 @@ flask
 mysqlclient
 gunicorn
 Flask-Caching
+redis

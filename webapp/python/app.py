@@ -29,7 +29,7 @@ config = {
 }
 
 cache = Cache(app, config={
-    'CACHE_TYPE': 'redis',
+    'CACHE_TYPE': 'RedisCache',
     'CACHE_DEFAULT_TIMEOUT': 60,
     'CACHE_REDIS_HOST': 'localhost',
     'CACHE_REDIS_PORT': 6379,
