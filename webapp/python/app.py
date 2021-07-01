@@ -12,14 +12,6 @@ import time
 from flask_caching import Cache
 
 
-cache = Cache(app, config={
-    'CACHE_TYPE': 'redis',
-    'CACHE_DEFAULT_TIMEOUT': 60,
-    'CACHE_REDIS_HOST': 'localhost',
-    'CACHE_REDIS_PORT': 6379,
-    'CACHE_REDIS_DB': '0'
-})
-
 static_folder = pathlib.Path(__file__).resolve().parent.parent / 'public'
 icons_folder = static_folder / 'icons'
 app = flask.Flask(__name__, static_folder=str(static_folder), static_url_path='')
@@ -35,6 +27,14 @@ config = {
     'db_user': os.environ.get('ISUBATA_DB_USER', 'root'),
     'db_password': os.environ.get('ISUBATA_DB_PASSWORD', ''),
 }
+
+cache = Cache(app, config={
+    'CACHE_TYPE': 'redis',
+    'CACHE_DEFAULT_TIMEOUT': 60,
+    'CACHE_REDIS_HOST': 'localhost',
+    'CACHE_REDIS_PORT': 6379,
+    'CACHE_REDIS_DB': '0'
+})
 
 
 def dbh():
