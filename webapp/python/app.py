@@ -346,9 +346,9 @@ def post_profile():
         flask.abort(403)
 
     cur = dbh().cursor()
-    user = db_get_user(cur, user_id)
-    if not user:
-        flask.abort(403)
+    # user = db_get_user(cur, user_id)
+    # if not user:
+    #     flask.abort(403)
 
     display_name = flask.request.form.get('display_name')
     avatar_name = None
