@@ -90,7 +90,8 @@ def login_required(func):
         if not "user_id" in flask.session:
             return flask.redirect('/login', 303)
         flask.request.user_id = user_id = flask.session['user_id']
-        user = db_get_user(dbh().cursor(), user_id)
+        # user = db_get_user(dbh().cursor(), user_id)
+        user = flask.session['user']
         if not user:
             flask.session.pop('user_id', None)
             return flask.redirect('/login', 303)
@@ -159,6 +160,7 @@ def post_register():
         flask.abort(400)
     user_id = register(dbh().cursor(), name, pw)
     flask.session['user_id'] = user_id
+    flask.session['user'] = name
     return flask.redirect('/', 303)
 
 
@@ -171,12 +173,13 @@ def get_login():
 def post_login():
     name = flask.request.form['name']
     cur = dbh().cursor()
-    cur.execute("SELECT id, salt, password FROM user WHERE name = %s", (name,))
+    cur.execute("SELECT id, name, salt, password FROM user WHERE name = %s", (name,))
     row = cur.fetchone()
     if not row or row['password'] != hashlib.sha1(
             (row['salt'] + flask.request.form['password']).encode('utf-8')).hexdigest():
         flask.abort(403)
     flask.session['user_id'] = row['id']
+    flask.session['user'] = row['name']
     return flask.redirect('/', 303)
 
 
@@ -189,7 +192,8 @@ def get_logout():
 @app.route('/message', methods=['POST'])
 def post_message():
     user_id = flask.session['user_id']
-    user = db_get_user(dbh().cursor(), user_id)
+    # user = db_get_user(dbh().cursor(), user_id)
+    user = flask.session['user']
     message = flask.request.form['message']
     channel_id = int(flask.request.form['channel_id'])
     if not user or not message or not channel_id:
@@ -306,9 +310,10 @@ def get_history(channel_id):
 def get_profile(user_name):
     channels, _ = get_channel_list_info()
 
-    cur = dbh().cursor()
-    cur.execute("SELECT * FROM user WHERE name = %s", (user_name,))
-    user = cur.fetchone()
+    # cur = dbh().cursor()
+    # cur.execute("SELECT * FROM user WHERE name = %s", (user_name,))
+    # user = cur.fetchone()
+    user = flask.session['user']
 
     if not user:
         flask.abort(404)
@@ -346,7 +351,8 @@ def post_profile():
         flask.abort(403)
 
     cur = dbh().cursor()
-    user = db_get_user(cur, user_id)
+    # user = db_get_user(cur, user_id)
+    user = flask.session['user']
     if not user:
         flask.abort(403)
 
