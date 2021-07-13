@@ -345,10 +345,10 @@ def post_profile():
     if not user_id:
         flask.abort(403)
 
-    # cur = dbh().cursor()
-    # user = db_get_user(cur, user_id)
-    # if not user:
-    #     flask.abort(403)
+    cur = dbh().cursor()
+    user = db_get_user(cur, user_id)
+    if not user:
+        flask.abort(403)
 
     display_name = flask.request.form.get('display_name')
     avatar_name = None
